@@ -55,10 +55,8 @@ function completedItem(){
   var btns = item.getElementsByTagName('button');
   var btnparent = btns[0].parentNode;
   btnparent.removeChild(btns[0]);
-  btns[0].style.color = 'rgb(250, 34, 34)';
-  let itemText = item.innerText;
-  itemText.style.textDecoration = 'line-through';
-  
+  btns[0].style.color = 'rgb(250, 34, 34)';  
+  item.style.textDecoration = "line-through";
 }
 var completeList = document.getElementById('completed');
 
