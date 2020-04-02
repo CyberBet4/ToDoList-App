@@ -1,4 +1,8 @@
 
+  var persistData = {
+    todo: [],
+    completed: []
+  }
   document.querySelector('form').addEventListener('submit', function(e){
     e.preventDefault();
      var text = document.getElementById('textbox').value;
@@ -6,14 +10,19 @@
      if(text){
        additemTodo(text);
      }
-
    });
 
 function additemTodo(text){
   let list = document.getElementById('list');
   let add = document.createElement('li');
+  add.className = 'todo';
   add.innerText = text;
   list.appendChild(add);
+  if(add.className == 'todo'){
+    persistData.todo.push(text);
+    console.log(persistData);
+  }
+  
   
   document.getElementById('textbox').value = '';
   /* console.log(add.childNodes[0]); */
@@ -45,13 +54,29 @@ function additemTodo(text){
 function removeItem(){
   let item = this.parentNode.parentNode; /* WHOLE INDIVIDUAL <LI> ITEM */
   let parent = item.parentNode;
+  let value = item.innerText;
   parent.removeChild(item);
+
+/* LOCAL STORAGE REMOVE ITEM */
+  if(parent.id == "list"){
+    persistData.todo.splice(persistData.todo.indexOf(value), 1);
+  } else if (parent.id == "completed") {
+    persistData.completed.splice(persistData.completed.indexOf(value), 1);
+  }  
+  console.log(persistData);
 }
 
 
 function completedItem(){
   let item = this.parentNode.parentNode; /* WHOLE INDIVIDUAL <LI> ITEM */
   completeList.appendChild(item);
+  let value = item.innerText;
+  
+  /* LOCAL STORAGE INPUT */
+  persistData.todo.splice(persistData.todo.indexOf(value), 1);
+  persistData.completed.push(value);
+  console.log(persistData);
+
   var btns = item.getElementsByTagName('button');
   var btnparent = btns[0].parentNode;
   btnparent.removeChild(btns[0]);
@@ -59,8 +84,3 @@ function completedItem(){
   item.style.textDecoration = "line-through";
 }
 var completeList = document.getElementById('completed');
-
-/* hello.childNodes, hello.children
-document.querySelectorAll
-hello.nextElementSibling, hello.previousElementSibling
-hello.insertBefore(hello, hello1) */
