@@ -1,8 +1,8 @@
 
-  var persistData = {
-    todo: [],
-    completed: []
-  }
+  var persistData = (localStorage.getItem('Todo') ? JSON.parse(localStorage.getItem('Todo')) : {todo: [],completed: []});
+  /* ON LOAD OF THE APPLICATION */
+
+renderData();
   document.querySelector('form').addEventListener('submit', function(e){
     e.preventDefault();
      var text = document.getElementById('textbox').value;
@@ -12,20 +12,28 @@
      }
    });
 
+function renderData(){
+  if(!persistData.todo.length && !persistData.completed.length) return;
+
+  for(var i = 0; i < persistData.todo.length; i++){
+    
+  }
+
+}
+
+   /* UPDATE LOCALSTORAGE */
+function dataUpdate(){
+  localStorage.setItem('Todo', JSON.stringify(persistData));
+}
 function additemTodo(text){
   let list = document.getElementById('list');
-  let add = document.createElement('li');
-  add.className = 'todo';
+  let add = document.createElement('li');  
   add.innerText = text;
   list.appendChild(add);
-  if(add.className == 'todo'){
-    persistData.todo.push(text);
-    console.log(persistData);
-  }
-  
+  persistData.todo.push(text);
+  dataUpdate();
   
   document.getElementById('textbox').value = '';
-  /* console.log(add.childNodes[0]); */
 
   list.insertBefore(add, list.childNodes[0]); /* NEW ITEM ADDED BEFORE THE FIRST CHILD NODE */
 
@@ -63,7 +71,7 @@ function removeItem(){
   } else if (parent.id == "completed") {
     persistData.completed.splice(persistData.completed.indexOf(value), 1);
   }  
-  console.log(persistData);
+  dataUpdate();
 }
 
 
@@ -75,7 +83,7 @@ function completedItem(){
   /* LOCAL STORAGE INPUT */
   persistData.todo.splice(persistData.todo.indexOf(value), 1);
   persistData.completed.push(value);
-  console.log(persistData);
+  dataUpdate();
 
   var btns = item.getElementsByTagName('button');
   var btnparent = btns[0].parentNode;
